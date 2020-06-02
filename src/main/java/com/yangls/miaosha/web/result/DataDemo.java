@@ -1,0 +1,43 @@
+package com.yangls.miaosha.web.result;
+
+/**
+ * @description:
+ * @author: yangLs
+ * @create: 2020-06-01 12:01
+ **/
+public class DataDemo {
+
+    private String name;
+    private int age;
+    private char sex;
+
+    public DataDemo(String name, int age, char sex) {
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public char getSex() {
+        return sex;
+    }
+
+    public void setSex(char sex) {
+        this.sex = sex;
+    }
+}
