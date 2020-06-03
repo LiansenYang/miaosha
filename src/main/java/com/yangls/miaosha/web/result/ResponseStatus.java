@@ -15,11 +15,13 @@ public enum  ResponseStatus {
     //登录模块 5002XX
     PASSWORD_EMPTY("500211","登录密码不能为空"),
     MOBILE_EMPTY ("500212", "手机号不能为空"),
-    USER_NOT_EXIST ("500213", "用户或密码错误，请重新输入");
+    USER_NOT_EXIST ("500213", "用户或密码错误，请重新输入"),
     //登录模块 5002XX
     //商品模块 5003XX
     //订单模块 5004XX
     //秒杀模块 5005XX
+    MIAO_SHA_OVER("500500","商品已经秒杀完毕"),
+    REPEATE_MIAOSHA("500501","不能重复秒杀");
 
 
     private String statusCode;
