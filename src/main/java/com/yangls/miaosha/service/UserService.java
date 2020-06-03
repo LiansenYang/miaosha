@@ -1,5 +1,6 @@
 package com.yangls.miaosha.service;
 
+import com.yangls.miaosha.model.MiaoshaUser;
 import com.yangls.miaosha.model.User;
 import com.yangls.miaosha.vo.LoginVo;
 import org.springframework.stereotype.Service;
@@ -20,4 +21,5 @@ public interface UserService {
 
     public boolean login(HttpServletResponse response, LoginVo loginVo);
 
+    MiaoshaUser getByToken(HttpServletResponse response, String token);
 }

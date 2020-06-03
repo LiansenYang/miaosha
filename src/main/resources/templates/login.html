@@ -83,11 +83,16 @@
             },
             success:function(data){
                 layer.closeAll();
-                if(data.code == 0){
+                if(data.errorCode== 0){
                     layer.msg("成功");
                     window.location.href="/goods/to_list";
                 }else{
-                    layer.msg(data.msg);
+                    if(data.errorCode==undefined || data.errorCode== "" ||data.errorCode== null){
+                        layer.msg("服务器端异常");
+                    }else{
+                        layer.msg(data.msg);
+                    }
+
                 }
             },
             error:function(){

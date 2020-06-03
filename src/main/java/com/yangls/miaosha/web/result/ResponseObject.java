@@ -14,31 +14,15 @@ public class ResponseObject<T> {
     private T data;
 
     public ResponseObject(T data) {
-        this(ResponseStatus.SUCCESS.getStatusCode(),
-                ResponseStatus.SUCCESS.getStatusMsg(),
-                data);
+        this(ResponseStatus.SUCCESS,data);
     }
     public ResponseObject(ResponseStatus responseStatus) {
-        this(responseStatus.getStatusCode(),responseStatus.getStatusMsg());
+        this(responseStatus,null);
     }
-
-    public ResponseObject(String errorCode, String msg) {
-        this(errorCode,msg,null);
-    }
-
-    public ResponseObject(String errorCode, String msg, T data) {
-        this.errorCode = errorCode;
-        this.msg = msg;
-        if(ResponseStatus.SUCCESS.getStatusCode().equals(errorCode)){
-            this.data = data;
-        }
-    }
-
-    /**
-     * 成功时候的调用
-     * */
-    public static <T> ResponseObject<T> success(T data){
-        return new ResponseObject<T>(data);
+    public ResponseObject(ResponseStatus responseStatus,T data) {
+       this.errorCode = responseStatus.getStatusCode();
+       this.msg = responseStatus.getStatusMsg();
+       this.data = data;
     }
 
     public String getErrorCode() {

@@ -1,5 +1,7 @@
 package com.yangls.miaosha.service.impl;
 
+import com.sun.tools.doclets.internal.toolkit.builders.ConstantsSummaryBuilder;
+import com.yangls.miaosha.common.Constants;
 import com.yangls.miaosha.dao.MiaoshaUserMapper;
 import com.yangls.miaosha.dao.UserMapper;
 import com.yangls.miaosha.exception.GlobalException;
@@ -37,8 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     RedisService redisService;
-
-    public static final String COOKI_NAME_TOKEN = "token";
 
     @Override
     public User getUserById(int id) {
@@ -90,9 +90,22 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public MiaoshaUser getByToken(HttpServletResponse response, String token) {
+        if(StringUtils.isEmpty(token)){
+            return null;
+        }
+        MiaoshaUser user = redisService.get(MiaoshaUserKey.token, token, MiaoshaUser.class);
+        if(user != null){
+            addCookie(response,token,user);
+        }
+
+        return user;
+    }
+
     private void addCookie(HttpServletResponse response, String token, MiaoshaUser user) {
         redisService.set(MiaoshaUserKey.token, token, user);
-        Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
+        Cookie cookie = new Cookie(Constants.COOKIE_NAME_TOKEN, token);
         cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);

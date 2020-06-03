@@ -44,10 +44,11 @@ public class HelloController {
 
     @RequestMapping("/error")
     @ResponseBody
-    public ResponseObject<DataDemo> error(){
-        return new ResponseObject<DataDemo>(
-                ResponseStatus.SERVER_ERROR.getStatusCode(),
-                ResponseStatus.SERVER_ERROR.getStatusMsg());
+    public ResponseObject error(){
+        User user = userService.getUserById(1);
+        redisService.set(UserKey.getById,"1",user);
+        int i=1/0;
+        return new ResponseObject(ResponseStatus.SERVER_ERROR);
     }
     @RequestMapping("/error2")
     @ResponseBody

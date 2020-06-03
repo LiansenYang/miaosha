@@ -1,5 +1,6 @@
 package com.yangls.miaosha.redis;
 
+import com.yangls.miaosha.exception.GlobalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +51,10 @@ public class RedisService {
 			 }else {
 				 jedis.setex(realKey, seconds, str);
 			 }
-			 return true;
 		 }finally {
 			  returnToPool(jedis);
 		 }
+		return true;
 	}
 	
 	/**
