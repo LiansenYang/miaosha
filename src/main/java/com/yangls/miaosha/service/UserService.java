@@ -19,7 +19,7 @@ public interface UserService {
 
     public boolean addUser();
 
-    public boolean login(HttpServletResponse response, LoginVo loginVo);
+    public String login(HttpServletResponse response, LoginVo loginVo);
 
     MiaoshaUser getByToken(HttpServletResponse response, String token);
 }

@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean login(HttpServletResponse response,LoginVo loginVo) {
+    public String login(HttpServletResponse response,LoginVo loginVo) {
         //查找数据库登录对象，如果纯在就放到缓存中
         MiaoshaUserExample miaoshaUserExample = new MiaoshaUserExample();
         //除了页面进行了MD5加密外还需要再次加密密码，形成  MD5(MD5(pass,salt),dbslat)
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         //生成cookie
         String token = UUIDUtil.getUUID();
         addCookie(response, token, miaoshaUser);
-        return true;
+        return token;
     }
 
     @Override
