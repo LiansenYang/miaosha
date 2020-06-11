@@ -18,4 +18,7 @@ public class Constants {
     public static final int MIAOSHA_STATUS_UNSTART= 0;
     public static final int MIAOSHA_STATUS_STARTING = 1;
     public static final int MIAOSHA_STATUS_STARTED = 2;
+
+    public static final String YES_CODE = "1";
+
 }

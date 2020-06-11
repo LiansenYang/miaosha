@@ -3,10 +3,10 @@ package com.yangls.miaosha.service.impl;
 import com.yangls.miaosha.dao.MiaoshaOrderMapper;
 import com.yangls.miaosha.dao.OrderInfoMapper;
 import com.yangls.miaosha.dao.exp.OrderInfoMapperExp;
-import com.yangls.miaosha.model.MiaoshaOrder;
-import com.yangls.miaosha.model.MiaoshaOrderExample;
-import com.yangls.miaosha.model.MiaoshaUser;
-import com.yangls.miaosha.model.OrderInfo;
+import com.yangls.miaosha.model.*;
+import com.yangls.miaosha.redis.OrderKey;
+import com.yangls.miaosha.redis.RedisService;
+import com.yangls.miaosha.service.MiaoshaService;
 import com.yangls.miaosha.service.OrderService;
 import com.yangls.miaosha.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +27,21 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderInfoMapperExp orderInfoMapperExp;
 
+    @Autowired
+    RedisService redisService;
+
 
     @Override
     public MiaoshaOrder getOrderByUserIdAndGoodsId(long userId, long goodsId){
-        MiaoshaOrderExample example = new MiaoshaOrderExample();
-        example.createCriteria().andUserIdEqualTo(userId).andGoodsIdEqualTo(goodsId);
-        List<MiaoshaOrder> miaoshaOrders = miaoshaOrderMapper.selectByExample(example);
-        if(miaoshaOrders != null &&miaoshaOrders.size() >0 ){
-            return miaoshaOrders.get(0);
-        }
-        return null;
+//        MiaoshaOrderExample example = new MiaoshaOrderExample();
+//        example.createCriteria().andUserIdEqualTo(userId).andGoodsIdEqualTo(goodsId);
+//        List<MiaoshaOrder> miaoshaOrders = miaoshaOrderMapper.selectByExample(example);
+//        if(miaoshaOrders != null &&miaoshaOrders.size() >0 ){
+//            return miaoshaOrders.get(0);
+//        }
+        //改从缓存中获取
+        MiaoshaOrder miaoshaOrder = redisService.get(OrderKey.getMiaoshaOrderByUidGid,""+userId+"_"+goodsId,MiaoshaOrder.class);
+        return miaoshaOrder;
     }
 
     @Override
@@ -52,13 +57,30 @@ public class OrderServiceImpl implements OrderService {
         orderInfo.setOrderChannel(new Byte("1"));
         orderInfo.setStatus(new Byte("0"));
         orderInfo.setUserId(user.getId());
-        //这个insert 返回的不是插入的个数，而是返回那个主键的id，具体看注解
-        long orderId = orderInfoMapperExp.insert(orderInfo);
+        orderInfoMapperExp.insert(orderInfo);
         MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
         miaoshaOrder.setGoodsId(goods.getId());
-        miaoshaOrder.setOrderId(orderId);
+        miaoshaOrder.setOrderId(orderInfo.getId());
         miaoshaOrder.setUserId(user.getId());
         miaoshaOrderMapper.insert(miaoshaOrder);
+
+        //创建订单之后把订单存放到缓存中
+        redisService.set(OrderKey.getMiaoshaOrderByUidGid,""+user.getId()+"_"+goods.getId(), miaoshaOrder);
+
         return orderInfo;
+    }
+
+    @Override
+    public OrderInfo getOrderById(long orderId) {
+
+        return orderInfoMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Override
+    public void deleteOrders() {
+        MiaoshaOrderExample miaoshaOrderExample = new MiaoshaOrderExample();
+        miaoshaOrderMapper.deleteByExample(miaoshaOrderExample);
+        OrderInfoExample orderInfoExample = new OrderInfoExample();
+        orderInfoMapper.deleteByExample(orderInfoExample);
     }
 }

@@ -10,4 +10,8 @@ public interface OrderService {
     public MiaoshaOrder getOrderByUserIdAndGoodsId(long userId,long goodsId);
 
     public OrderInfo createOrder(MiaoshaUser user, GoodsVo goodsVo);
+
+    public OrderInfo getOrderById(long orderId);
+
+    void deleteOrders();
 }

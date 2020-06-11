@@ -1,5 +1,6 @@
 package com.yangls.miaosha.service;
 
+import com.yangls.miaosha.exception.GlobalException;
 import com.yangls.miaosha.model.MiaoshaUser;
 import com.yangls.miaosha.model.User;
 import com.yangls.miaosha.vo.LoginVo;
@@ -16,10 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserService {
     public User getUserById(int id);
 
-
     public boolean addUser();
 
-    public String login(HttpServletResponse response, LoginVo loginVo);
+    public String login(HttpServletResponse response, LoginVo loginVo) throws GlobalException;
 
     MiaoshaUser getByToken(HttpServletResponse response, String token);
 }

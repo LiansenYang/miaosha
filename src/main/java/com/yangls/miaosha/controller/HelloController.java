@@ -7,14 +7,19 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.yangls.miaosha.annotation.NeedLogin;
 import com.yangls.miaosha.dao.MiaoshaUserMapper;
 import com.yangls.miaosha.model.MiaoshaUser;
 import com.yangls.miaosha.model.MiaoshaUserExample;
 import com.yangls.miaosha.model.User;
+import com.yangls.miaosha.rabbitMq.MQSender;
+import com.yangls.miaosha.redis.GoodsKey;
 import com.yangls.miaosha.redis.RedisService;
 import com.yangls.miaosha.redis.UserKey;
+import com.yangls.miaosha.service.GoodsService;
 import com.yangls.miaosha.service.UserService;
 import com.yangls.miaosha.util.MD5Util;
+import com.yangls.miaosha.vo.GoodsVo;
 import com.yangls.miaosha.web.result.DataDemo;
 import com.yangls.miaosha.web.result.ResponseObject;
 import com.yangls.miaosha.web.result.ResponseStatus;
@@ -23,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
@@ -44,6 +50,10 @@ public class HelloController {
 
     @Autowired
     MiaoshaUserMapper miaoshaUserMapper;
+
+    @Autowired
+    MQSender mqSender;
+
 
     @RequestMapping("hello2")
     @ResponseBody
@@ -73,6 +83,7 @@ public class HelloController {
     }
 
     @RequestMapping("/thymeleaf")
+    @NeedLogin
     public String thymeleaf(Model model){
         System.out.println("haha");
         model.addAttribute("name","yangLs");
@@ -198,6 +209,49 @@ public class HelloController {
         }
         return new ResponseObject<Boolean>(true);
     }
+
+
+
+
+    @RequestMapping("mqSender")
+    @ResponseBody
+    public ResponseObject<Boolean> mqSender(){
+        mqSender.sendMiaoshaMessage("hello RabbitMq");
+        return new ResponseObject<Boolean>(true);
+    }
+
+
+    @RequestMapping("topicExchageSender")
+    @ResponseBody
+    public ResponseObject<Boolean> topicexchageSender(){
+        mqSender.sendTopic("hello RabbitMq");
+        return new ResponseObject<Boolean>(true);
+    }
+
+    @RequestMapping("fanoutExchageSender")
+    @ResponseBody
+    public ResponseObject<Boolean> fanoutExchageSender(){
+        mqSender.sendFanout("hello RabbitMq");
+        return new ResponseObject<Boolean>(true);
+    }
+
+    @RequestMapping("headerExchageSender")
+    @ResponseBody
+    public ResponseObject<Boolean> headerExchageSender(){
+        mqSender.sendHeader("hello RabbitMq");
+        return new ResponseObject<Boolean>(true);
+    }
+
+    @RequestMapping("test_websocket")
+    public String test_websocket(){
+        return "test_websocket";
+    }
+
+
+
+
+
+
 
 
 

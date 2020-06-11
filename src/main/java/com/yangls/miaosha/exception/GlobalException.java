@@ -7,7 +7,7 @@ import com.yangls.miaosha.web.result.ResponseStatus;
  * @author: yangLs
  * @create: 2020-06-02 20:29
  **/
-public class GlobalException extends RuntimeException {
+public class GlobalException extends Exception {
 
     private ResponseStatus responseStatus;
 

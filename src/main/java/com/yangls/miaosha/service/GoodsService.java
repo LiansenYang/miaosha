@@ -1,5 +1,6 @@
 package com.yangls.miaosha.service;
 
+import com.yangls.miaosha.exception.GlobalException;
 import com.yangls.miaosha.vo.GoodsVo;
 import java.util.*;
 
@@ -12,5 +13,8 @@ public interface GoodsService {
      * 减少库存
      * @param goodsId
      */
-    void reduceStock(long goodsId);
+    void reduceStock(long goodsId) throws GlobalException;
+
+
+    void resetStock(List<GoodsVo> goodsList);
 }

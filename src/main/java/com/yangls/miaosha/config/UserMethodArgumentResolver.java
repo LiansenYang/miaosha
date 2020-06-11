@@ -1,5 +1,6 @@
 package com.yangls.miaosha.config;
 
+import com.yangls.miaosha.common.CommonUtils;
 import com.yangls.miaosha.common.Constants;
 import com.yangls.miaosha.common.CookieUtil;
 import com.yangls.miaosha.model.MiaoshaUser;
@@ -43,15 +44,7 @@ public class UserMethodArgumentResolver implements HandlerMethodArgumentResolver
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
 
-        String paramToken = request.getParameter(Constants.COOKIE_NAME_TOKEN);
-        String cookieToken = null;
-        if(StringUtils.isEmpty(paramToken)){
-            cookieToken = CookieUtil.getCookieValue(request, Constants.COOKIE_NAME_TOKEN);
-            if(StringUtils.isEmpty(cookieToken)) {
-                return null;
-            }
-        }
-        String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
+        String token = CommonUtils.getToken(request,response);
         return userService.getByToken(response, token);
     }
 }
