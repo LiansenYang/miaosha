@@ -28,6 +28,7 @@ public class CommonUtils {
 
     public static <T> String beanToString(T value) {
         if(value == null) {
+            System.out.println("jsjdj");
             return null;
         }
         Class<?> clazz = value.getClass();
